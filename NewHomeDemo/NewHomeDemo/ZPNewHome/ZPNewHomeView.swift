@@ -135,6 +135,12 @@ extension ZPNewHomeView: UIScrollViewDelegate {
             offset.x = titleScrollView.contentSize.width - scrollW
         }
         titleScrollView.setContentOffset(offset, animated: true)
+        
+        for lable: ZP_TitleLable in titleScrollView.subviews as! [ZP_TitleLable] {
+            if lable != subView {
+                lable.scale = 0
+            }
+        }
     }
     
     func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
@@ -144,6 +150,9 @@ extension ZPNewHomeView: UIScrollViewDelegate {
     func scrollViewDidScroll(scrollView: UIScrollView) {
         let index = Int(scrollView.contentOffset.x / scrollW)
         let scale = scrollView.contentOffset.x / scrollW - CGFloat(index)
+        if scrollView.contentOffset.x < 0 || scrollView.contentOffset.x > scrollView.contentSize.width - scrollView.frame.size.width {
+            return
+        }
         let leftLable = titleScrollView.viewWithTag(tagStart + index) as! ZP_TitleLable
         leftLable.scale = 1 - scale
         if index >= ZP_ContentVCS!.count - 1 {
